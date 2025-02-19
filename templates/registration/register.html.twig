@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="register-container">
+    <h1>Registro</h1>
+    <div class="register-box">
+        {{ form_start(registrationForm) }}
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.roles) }}
+            {{ form_widget(registrationForm.roles, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.password.first) }}
+            {{ form_widget(registrationForm.password.first, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.password.second) }}
+            {{ form_widget(registrationForm.password.second, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.nombre) }}
+            {{ form_widget(registrationForm.nombre, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <div class="input-group">
+            {{ form_label(registrationForm.fechaNacimiento) }}
+            {{ form_widget(registrationForm.fechaNacimiento, {'attr': {'class': 'input-field'}}) }}
+        </div>
+        
+        <button class="register-button">Registrar</button>
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .register-container {
+        text-align: center;
+    }
+    .register-box {
+        background: #181818;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 350px;
+    }
+    .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .input-field {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 4px;
+        background: #282828;
+        color: white;
+    }
+    .register-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #1DB954;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .register-button:hover {
+        background-color: #1ed760;
+    }
+</style>
+{% endblock %}

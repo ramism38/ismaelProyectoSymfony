@@ -40,10 +40,23 @@
 
     <div class="header">
         <input type="text" class="form-control search-bar" placeholder="Buscar canciones...">
-        <div class="profile-icon">👤</div>
+        <a href="{{ path('app_login') }}" class="profile-icon">👤</a>
     </div>
 
     <div class="content">
+        {% if (is_granted('ROLE_USER')) or (is_granted('ROLE_ADMIN')) or (is_granted('ROLE_MANAGER')) %}
+        <br><br>
+            <p>Hola, {{ app.user.nombre }}</p>
+            <a href="{{ path('app_logout') }}" class="profile-icon">cerrar sesion</a>
+            
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin') }}" class="profile-icon">Dashboard</a>
+            {% endif %}
+
+            {% if is_granted('ROLE_MANAGER') %}
+                <a href="{{ path('estadisticas_dashboard') }}" class="profile-icon">Datos de explotacion</a>
+            {% endif %}
+        {% endif %}
         <div class="songs-grid" id="songs-section">
             {% for song in songs %}
                 <div class="song-card" onclick="playSong('{{ song.file }}', '{{ song.name }}')">

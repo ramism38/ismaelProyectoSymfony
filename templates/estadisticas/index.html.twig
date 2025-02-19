@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Estadísticas {% endblock %}
+
+{% block body %}
+<h1>Estadísticas</h1>
+
+<canvas id="playlistLikesChart"></canvas>
+<canvas id="playlistReproduccionesChart"></canvas>
+<canvas id="usuariosEdadChart"></canvas>
+<canvas id="cancionesMasReproducidasChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Playlist más likes
+    fetch("{{ path('estadisticas_playlist_likes') }}")
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById("playlistLikesChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.map(item => item.nombre),
+                    datasets: [{
+                        label: "Likes",
+                        data: data.map(item => item.likes),
+                        backgroundColor: "blue"
+                    }]
+                }
+            });
+        });
+
+    // Playlist más reproducciones
+    fetch("{{ path('estadisticas_playlist_reproducciones') }}")
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById("playlistReproduccionesChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: data.map(item => item.nombre),
+                    datasets: [{
+                        label: "Reproducciones",
+                        data: data.map(item => item.total_reproducciones),
+                        backgroundColor: "red"
+                    }]
+                }
+            });
+        });
+
+    // Distribución de edades de usuarios
+    fetch("{{ path('estadisticas_usuarios_edad') }}")
+        .then(response => response.json())
+        .then(data => {
+            const edadesAgrupadas = {};
+            data.forEach(edad => {
+                if (!edadesAgrupadas[edad]) edadesAgrupadas[edad] = 0;
+                edadesAgrupadas[edad]++;
+            });
+
+            const edades = Object.keys(edadesAgrupadas);
+            const cantidades = Object.values(edadesAgrupadas);
+
+            const ctx = document.getElementById("usuariosEdadChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: edades,
+                    datasets: [{
+                        label: "Usuarios",
+                        data: cantidades,
+                        backgroundColor: ["red", "blue", "green", "yellow", "purple"]
+                    }]
+                }
+            });
+        });
+
+    // Canciones más reproducidas
+    fetch("{{ path('estadisticas_canciones_mas_reproducidas') }}")
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById("cancionesMasReproducidasChart").getContext("2d");
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: data.map(item => item.titulo),
+                    datasets: [{
+                        label: "Reproducciones",
+                        data: data.map(item => item.reproducciones),
+                        backgroundColor: "orange",
+                        borderColor: "red",
+                        fill: false
+                    }]
+                }
+            });
+        });
+
+});
+</script>
+{% endblock %}
+
