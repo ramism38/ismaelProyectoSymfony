@@ -34,12 +34,16 @@
             <ul class="nav flex-column">
                 <li class="nav-item"><a href="#" onclick="showSection('songs')" class="nav-link text-white">Canciones</a></li>
                 <li class="nav-item"><a href="#" onclick="showSection('playlists')" class="nav-link text-white">Playlists</a></li>
+                {% if is_granted('ROLE_USER') %}
+                    <li class="nav-item"><button class="btn btn-success" onclick="createPlaylist()">Crear Playlist</button></li>
+                {% endif %}
             </ul>
         </nav>
     </div>
 
+
     <div class="header">
-        <input type="text" class="form-control search-bar" placeholder="Buscar canciones...">
+        <input type="text" class="form-control search-bar" placeholder="Buscar canciones y playlists..." onkeyup="filterContent()">
         <a href="{{ path('app_login') }}" class="profile-icon">👤</a>
     </div>
 
@@ -60,20 +64,19 @@
         <div class="songs-grid" id="songs-section">
             {% for song in songs %}
                 <div class="song-card" onclick="playSong('{{ song.file }}', '{{ song.name }}')">
-                    <img src="{{ song.image }}" alt="{{ song.image }}">
-                    <p>{{ song.name }}</p>
+                    <img src="{{ song.image }}" alt="{{ song.name }}">
+                    <p class="song-title">{{ song.name }}</p>
                 </div>
             {% endfor %}
         </div>
         <div class="songs-grid" id="playlists-section">
             {% for playlist in playlists %}
                 <div class="song-card" onclick="showPlaylist('{{ playlist.id }}')">
-                <img src="{{ playlist.image }}" alt="{{ playlist.name }}">
-                    <p>{{ playlist.name }}</p>
+                    <img src="{{ playlist.image }}" alt="{{ playlist.name }}">
+                    <p class="playlist-title">{{ playlist.name }}</p>
                 </div>
             {% endfor %}
         </div>
-    </div>
 
     <div class="player" id="player">
         <span class="close-btn" onclick="closePlayer()">✖</span>
@@ -92,6 +95,25 @@
     </div>
 
     <script>
+    function filterContent() {
+            let input = document.querySelector('.search-bar').value.toLowerCase();
+            document.querySelectorAll('.song-card').forEach(card => {
+                let title = card.querySelector('p').textContent.toLowerCase();
+                card.style.display = title.includes(input) ? 'block' : 'none';
+            });
+        }
+
+        function createPlaylist() {
+            let name = prompt('Introduce el nombre de la playlist:');
+            if (name) {
+                fetch('/playlist/new', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name })
+                }).then(() => location.reload());
+            }
+        }
+
 function showSection(section) {
     document.getElementById('songs-section').hidden = true;
     document.getElementById('playlists-section').hidden = true;
@@ -102,8 +124,6 @@ function showSection(section) {
         document.getElementById('playlists-section').hidden = false;
     }
 }
-
-
 
         function showPlaylist(id){
             window.location.href = `/playlist/show/${id}`;

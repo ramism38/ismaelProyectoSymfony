@@ -26,6 +26,7 @@
         .volume-control { width: 100px; }
         .close-btn { cursor: pointer; font-size: 20px; margin-left: 10px; }
         .play-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .add-songs-container { display: none; background: #222; padding: 20px; border-radius: 10px; }
        
     </style>
 </head>
@@ -45,9 +46,27 @@
     </div>
 
     <div class="content">
+    <br><br><br>
         <h2 class="playlist-title">{{ nombre }}</h2>
+        {% if app.user and app.user.id == propietario %}
+            <button class="btn btn-primary" onclick="toggleAddSongs()">Añadir Canciones</button>
+            <div class="add-songs-container" id="addSongsContainer">
+                <input type="text" id="songSearch" class="form-control" placeholder="Buscar canciones..." onkeyup="filterSongs()">
+                <ul id="allSongsList">
+                
+                    {% for song in songs %}
+                        <li>
+                        <img src="{{ song.image }}" alt="{{ song.name }}" class="song-img">
+                            <input type="checkbox" value="{{ song.id }}"> {{ song.name }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <button class="btn btn-success" onclick="addSongsToPlaylist({{ playlistId }})">Añadir Canciones</button>
+            </div>
+        {% endif %}
+        
         <ul class="song-list">
-            {% for song in songs %}
+            {% for song in songsPlaylist %}
                 <li class="song-item" onclick="playSong('{{ song.file }}', '{{ song.name }}')">
                     <img src="{{ song.image }}" alt="{{ song.name }}" class="song-img">
                     <div class="song-info">
@@ -75,7 +94,43 @@
         </audio>
     </div>
 
-    <script>  
+    <script>
+    function toggleAddSongs() {
+            let container = document.getElementById('addSongsContainer');
+            container.style.display = container.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        function filterSongs() {
+            let search = document.getElementById('songSearch').value.toLowerCase();
+            let songs = document.querySelectorAll('#allSongsList li');
+            songs.forEach(song => {
+                song.style.display = song.textContent.toLowerCase().includes(search) ? '' : 'none';
+            });
+        }
+        
+        function addSongsToPlaylist(playlistId) {
+            let selectedSongs = [];
+            document.querySelectorAll('#allSongsList input:checked').forEach(input => {
+                selectedSongs.push(input.value);
+            });
+            
+        fetch(`/playlist/add-songs/${playlistId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ songIds: selectedSongs })
+        })
+        .then(response => response.json())  // Convertir la respuesta a JSON
+        .then(data => {
+            if (data.success) {
+                //alert('Canciones añadidas correctamente');
+                location.reload();  // Recargar la página
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error)); // Capturar errores en la consola
+
+        }
         function playSong(file, name) {
             let audio = document.getElementById('audioPlayer');
             let source = document.getElementById('audioSource');

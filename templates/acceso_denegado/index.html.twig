@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acceso Denegado{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #121212;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+    .denied-container {
+        background-color: #1DB954;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+        transform: scale(0);
+        animation: scaleUp 0.5s ease-out forwards;
+    }
+    h1 {
+        font-size: 2.5em;
+        animation: fadeIn 1.5s ease-out;
+    }
+    p {
+        font-size: 1.2em;
+        margin-top: 10px;
+        opacity: 0;
+        animation: fadeIn 2s 0.5s forwards;
+    }
+    .btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1.2em;
+        color: #fff;
+        background-color: #191414;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        opacity: 0;
+        animation: fadeIn 2s 1s forwards;
+    }
+    .btn:hover {
+        background-color: #1DB954;
+    }
+
+    @keyframes scaleUp {
+        to {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="denied-container">
+    <h1>Acceso Denegado</h1>
+    <p>No tienes permiso para acceder a esta sección.</p>
+    <a href="/music" class="btn">Volver al inicio</a>
+</div>
+{% endblock %}

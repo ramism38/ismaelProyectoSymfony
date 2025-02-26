@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Cancion;
 use App\Entity\Playlist;
+use App\Entity\Usuario;
 
 class MusicController extends AbstractController
 {
@@ -25,9 +26,9 @@ class MusicController extends AbstractController
 
 
         foreach ($songs as $song) {
-            if(!file_exists($imageDirectory . $song->getImagen())){
+            if (!file_exists($imageDirectory . $song->getImagen())) {
                 $imagen = "cancionDefault.jpg";
-            }else{
+            } else {
                 $imagen = $song->getImagen();
             }
             $songData[] = [
@@ -37,16 +38,24 @@ class MusicController extends AbstractController
             ];
         }
 
-        // Recuperar playlists desde la base de datos
-        $playlists = $entityManager->getRepository(Playlist::class)->findAll();
+        // Recuperar playlists desde la base de datos según el usuario autenticado
+        $user = $this->getUser();
+
+        if ($user) {
+            // Si el usuario está autenticado, mostrar solo sus playlists
+            $usuarioObject = $entityManager->getRepository(Usuario::class)->findOneBy(["email"=>$user->getUserIdentifier()]);
+            $playlists = $entityManager->getRepository(Playlist::class)->findBy(['usuarioPropietario' => $usuarioObject->getId()]);
+        } else {
+            // Si no hay usuario, opcionalmente podríamos mostrar todas las playlists o ninguna
+            $playlists = $entityManager->getRepository(Playlist::class)->findAll();
+        }
 
         // Crear estructura para la vista
         $playlistsData = [];
-
         foreach ($playlists as $playlist) {
             $playlistsData[] = [
                 'name' => $playlist->getNombre(),
-                'image' => $imageDirectory . "playlistDefault.jpg", // Puedes personalizar esto
+                'image' => $imageDirectory . "playlistDefault.jpg",
                 'id' => $playlist->getId(),
             ];
         }

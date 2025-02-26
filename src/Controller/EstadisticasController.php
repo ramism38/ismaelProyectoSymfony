@@ -7,6 +7,7 @@ use App\Repository\PlaylistCancionRepository;
 use App\Repository\UsuarioRepository;
 use App\Repository\PlaylistRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpParser\Node\Stmt\Echo_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,11 +76,29 @@ class EstadisticasController extends AbstractController
 
         foreach ($canciones as $cancion) {
             $data[] = [
-                'reproduciones' => $cancion->getReproducciones(),
+                'reproducciones' => $cancion->getReproducciones(),
                 'titulo' => $cancion->getCancion()->getTitulo(),
+                //'x' => $canciones,
             ];
         }
 
         return new JsonResponse($data);
     }
+
+    /*#[Route('/manager/estadisticas/canciones-mas-reproducidas', name: 'estadisticas_canciones_mas_reproducidas')]
+    public function estiloReproduccion(CancionRepository $CancionRepository): JsonResponse
+    {  
+        $canciones = $CancionRepository->findBy([], ['reproducciones' => 'DESC'], 10);
+        $data = [];
+
+        foreach ($canciones as $cancion) {
+            $data[] = [
+                'reproducciones' => $cancion->getReproducciones(),
+                'titulo' => $cancion->getCancion()->getTitulo(),
+                //'x' => $canciones,
+            ];
+        }
+
+        return new JsonResponse($data);
+    }*/ 
 }
