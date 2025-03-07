@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\LogController;
 use App\Entity\Cancion;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -20,6 +21,7 @@ class CancionCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
+         
         return [
             IdField::new('id')->hideOnForm(),
             AssociationField::new('genero', 'Genero')->setFormTypeOption('by_reference', true), 

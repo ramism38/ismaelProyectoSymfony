@@ -39,9 +39,6 @@ security:
         - { path: ^/user, roles: ROLE_USER }
         - { path: ^/manager, roles: ROLE_MANAGER }
 
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN]
 
 when@test:
     security:

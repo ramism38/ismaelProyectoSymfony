@@ -41,28 +41,40 @@ class MusicController extends AbstractController
         // Recuperar playlists desde la base de datos según el usuario autenticado
         $user = $this->getUser();
 
+        $playlistsData = [];
         if ($user) {
             // Si el usuario está autenticado, mostrar solo sus playlists
             $usuarioObject = $entityManager->getRepository(Usuario::class)->findOneBy(["email"=>$user->getUserIdentifier()]);
             $playlists = $entityManager->getRepository(Playlist::class)->findBy(['usuarioPropietario' => $usuarioObject->getId()]);
-        } else {
+             // Crear estructura para la vista
+            foreach ($playlists as $playlist) {
+                $playlistsData[] = [
+                    'name' => $playlist->getNombre(),
+                    'image' => $imageDirectory . "playlistDefault.jpg",
+                    'id' => $playlist->getId(),
+                ];
+        }
+        }/*else {
             // Si no hay usuario, opcionalmente podríamos mostrar todas las playlists o ninguna
             $playlists = $entityManager->getRepository(Playlist::class)->findAll();
-        }
+        }*/
 
-        // Crear estructura para la vista
-        $playlistsData = [];
-        foreach ($playlists as $playlist) {
-            $playlistsData[] = [
+        $playlistsG = $entityManager->getRepository(Playlist::class)->findAll();
+        $playlistsGlobalData = [];
+
+        foreach ($playlistsG as $playlist) {
+            $playlistsGlobalData[] = [
                 'name' => $playlist->getNombre(),
                 'image' => $imageDirectory . "playlistDefault.jpg",
                 'id' => $playlist->getId(),
             ];
         }
 
+
         return $this->render('music/index.html.twig', [
             'songs' => $songData,
             'playlists' => $playlistsData,
+            'playlistGlobal' => $playlistsGlobalData,
         ]);
     }
 }

@@ -49,7 +49,8 @@ final class PlaylistController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['message' => 'Playlist creada exitosamente',
-                                'user' => $user]);
+                                'user' => $user,
+                                'logResponse' => $this->forward(LogController::class . '::logAction', ['action' => 'Creación de playlist'])]);
     }
 
 
@@ -88,10 +89,13 @@ final class PlaylistController extends AbstractController
 
 
         foreach ($songs as $song) {
+            $imageDirectory = 'images/';
             if (!file_exists($imageDirectory . $song->getImagen())) {
+                $imageDirectory = '/images/';
                 $imagen = "cancionDefault.jpg";
             } else {
                 $imagen = $song->getImagen();
+                $imageDirectory = '/images/';
             }
             $songData[] = [
                 'name' => $song->getTitulo(),

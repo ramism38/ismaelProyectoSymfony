@@ -11,6 +11,7 @@ final class AccesoDenegadoController extends AbstractController
     #[Route('/acceso-denegado', name: 'acceso_denegado')]
     public function accesoDenegado()
     {
+        $this->forward(LogController::class . '::logAction', ['action' => 'Se deniega el acceso']);
         return $this->render('acceso_denegado/index.html.twig');
     }
 }

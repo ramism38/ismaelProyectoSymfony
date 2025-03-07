@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\LogController;
 use App\Entity\PlaylistCancion;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -19,6 +20,7 @@ class PlaylistCancionCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $this->forward(LogController::class . '::logAction', ['action' => 'PlaylistCancion - CRUD']);
         return [
             IdField::new('id')->hideOnForm(),
             AssociationField::new('cancion', 'Cancion')->setFormTypeOption('by_reference', true),

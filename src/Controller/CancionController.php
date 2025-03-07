@@ -39,6 +39,8 @@ final class CancionController extends AbstractController
         $em->persist($cancion);
         $em->flush();
 
+        $this->forward(LogController::class . '::logAction', ['action' => 'Creacion de cancion']);
+
         return new Response('Canción creada con ID ' . $cancion->getId());
     }
 

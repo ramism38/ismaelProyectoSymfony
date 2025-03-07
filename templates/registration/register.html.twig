@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="register-container">
-    <h1>Registro</h1>
+    <h1 style="text-shadow: 0 0 5px #ffffff;">Registro</h1>
     <div class="register-box">
         {{ form_start(registrationForm) }}
         
@@ -33,7 +33,7 @@
         
         <div class="input-group">
             {{ form_label(registrationForm.fechaNacimiento) }}
-            {{ form_widget(registrationForm.fechaNacimiento, {'attr': {'class': 'input-field'}}) }}
+            {{ form_widget(registrationForm.fechaNacimiento, {'attr': {'class': 'input-field', 'type': 'date'}}) }}
         </div>
         
         <button class="register-button">Registrar</button>
@@ -42,6 +42,12 @@
 </div>
 
 <style>
+    @keyframes neon-glow {
+        0% { text-shadow: 0 0 5px #1DB954, 0 0 10px #1DB954, 0 0 20px #1DB954; }
+        50% { text-shadow: 0 0 10px #1ed760, 0 0 20px #1ed760, 0 0 30px #1ed760; }
+        100% { text-shadow: 0 0 5px #1DB954, 0 0 10px #1DB954, 0 0 20px #1DB954; }
+    }
+
     body {
         background-color: #121212;
         color: white;
@@ -59,8 +65,9 @@
         background: #181818;
         padding: 40px;
         border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 15px rgba(33, 42, 142, 0.8);
         width: 350px;
+        animation: neon-glow 1.5s infinite alternate;
     }
     .input-group {
         margin-bottom: 15px;
@@ -70,6 +77,8 @@
         display: block;
         margin-bottom: 5px;
         font-weight: bold;
+        color: rgba(33, 42, 142, 0.8);
+        text-shadow: 0 0 5px rgba(33, 42, 142, 0.8), 0 0 10px rgba(33, 42, 142, 0.8);
     }
     .input-field {
         width: 100%;
@@ -78,19 +87,29 @@
         border-radius: 4px;
         background: #282828;
         color: white;
+        box-shadow: 0 0 5px rgba(33, 42, 142, 0.8);
+        outline: none;
+        transition: all 0.3s ease-in-out;
+    }
+    .input-field:focus {
+        box-shadow: 0 0 10px rgba(33, 42, 142, 0.8), 0 0 20px rgba(33, 42, 142, 0.8);
     }
     .register-button {
         width: 100%;
         padding: 10px;
-        background-color: #1DB954;
+        background-color:rgb(216, 128, 34);
         border: none;
         color: white;
         font-size: 16px;
         cursor: pointer;
         border-radius: 4px;
+        text-shadow: 0 0 5px #ffffff;
+        box-shadow: 0 0 10px rgb(216, 128, 34);
+        transition: all 0.3s ease-in-out;
     }
     .register-button:hover {
-        background-color: #1ed760;
+        background-color:rgb(215, 101, 30);
+        box-shadow: 0 0 15px rgb(215, 101, 30), 0 0 30px #1e;
     }
-</style>
+    </style>
 {% endblock %}

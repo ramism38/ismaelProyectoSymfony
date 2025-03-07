@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\LogController;
 use App\Entity\Perfil;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -17,6 +18,7 @@ class PerfilCrudController extends AbstractCrudController
 
     public function configureFieldsSetPerfil(string $pageName): iterable
     {
+        $this->forward(LogController::class . '::logAction', ['action' => 'Perfil - CRUD']);
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('foto'),

@@ -30,10 +30,12 @@ class RegistrationController extends AbstractController
             $user->setRoles($form->get('roles')->getData());
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('music_list');
+            return $this->redirectToRoute('app_login');
         }
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'logResponse' => // Llamar al LogController sin HTTPClient
+                                $this->forward(LogController::class . '::logAction', ['action' => 'Registrar'])
         ]);
     }
 }

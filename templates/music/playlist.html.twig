@@ -10,12 +10,49 @@
     <style>
         body { display: flex; flex-direction: column; height: 100vh; margin: 0; background: #000; color: white; }
         .sidebar { width: 250px; height: 100vh; background: #121212; color: white; padding: 20px; position: fixed; top: 0; left: 0; }
+        .sidebar-title {
+    color: white;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 10px white, 0 0 20px white;
+}
         .content { margin-left: 250px; flex: 1; padding: 20px; overflow-y: auto; margin-bottom: 90px; }
-        .header { background: #181818; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 250px; width: calc(100% - 250px); z-index: 1000; }
+        .header {
+    background: #121212;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribuye a los extremos */
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    z-index: 1000;
+}
+/* Contenedor izquierdo (buscador) */
+.header-left {
+    flex: 1; /* Ocupa el espacio disponible */
+}
+
+/* Contenedor derecho (usuario y sesión) */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaciado entre elementos */
+}
+.header, .footer {
+    background: #121212;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+}
         .playlist-title { font-size: 28px; font-weight: bold; margin-bottom: 20px; text-align: center; }
         .song-list { list-style: none; padding: 0; margin-top: 60px; }
         .song-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #333; cursor: pointer; transition: background 0.3s; }
-        .song-item:hover { background: #222; }
+        .song-item:hover { background: #6287f8; }
         .song-img { width: 50px; height: 50px; border-radius: 8px; margin-right: 15px; }
         .song-info { flex: 1; }
         .song-name { font-size: 16px; font-weight: bold; }
@@ -26,43 +63,188 @@
         .volume-control { width: 100px; }
         .close-btn { cursor: pointer; font-size: 20px; margin-left: 10px; }
         .play-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
-        .add-songs-container { display: none; background: #222; padding: 20px; border-radius: 10px; }
+            .add-songs-container {
+        display: none;
+        background: #181818;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    #allSongsList {
+        list-style: none;
+        padding: 0;
+        max-height: 300px;
+        overflow-y: auto;
+        background: #121212;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    #allSongsList li {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        transition: background 0.3s;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #allSongsList li:hover {
+        background: rgba(0, 255, 255, 0.8);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    }
+
+    .song-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        margin-right: 15px;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
        
+
+       .neon-btn {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    background: none;
+    border: 2px solid #6287f8;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+
+.neon-btn:hover {
+    background: #6287f8;
+    text-shadow: 0 0 5px #000;
+}
+
+.neon-btn:active {
+    background: #ff6e27;
+    text-shadow: 0 0 5px #000;
+    border: 2px solid #ff6e27;
+}
+
+.neon-link {
+    display: block;
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: 0.3s;
+    text-shadow: 0 0 8px #0ff;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 300px; /* Tamaño fijo */
+    background: white;
+    color: white;
+    border: 1px solid #0ff; /* Efecto neón */
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* Estilos para el nombre de usuario */
+.user-name {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Botones de sesión */
+.profile-icon {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+/* Botón de cerrar sesión */
+.logout-btn {
+    background: red;
+    color: white;
+}
+
+.logout-btn:hover {
+    background: darkred;
+}
+
+/* Botón de login */
+.login-btn {
+    background: #0ff;
+    color: black;
+}
+
+.login-btn:hover {
+    background: #08f;
+    color: white;
+}
+
+.search-bar:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px #6287f8;
+}
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <h2><a href="/music">MySpotify</a></h2>
-        <nav>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a href="/music" class="nav-link text-white">Canciones</a></li>
-                <li class="nav-item"><a href="/music" class="nav-link text-white">Playlists</a></li>
-            </ul>
-        </nav>
-    </div>
+    <h2><a href="./music" class="sidebar-title">MySpotify</a></h2>
+    <nav>
+       <!-- <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="#" onclick="showSection('songs')" class="nav-link neon-link">🎵 Canciones</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" onclick="showSection('playlists')" class="nav-link neon-link">📂 Playlists</a>
+            </li>
+        </ul>-->
+    </nav>
+</div>
 
-    <div class="header">
-        <input type="text" class="form-control search-bar" placeholder="Buscar canciones...">
+<div class="header">
+    <div class="header-left">
+        <input type="text" class="form-control search-bar" placeholder="Buscar canciones y playlists..." onkeyup="filterContent()">
     </div>
+    <div class="header-right">
+        {% if (is_granted('ROLE_USER')) or (is_granted('ROLE_ADMIN')) or (is_granted('ROLE_MANAGER')) %}
+            <p class="user-name">Hola, {{ app.user.nombre }}</p>
+            <a href="{{ path('app_logout') }}" class="profile-icon logout-btn">Cerrar sesión</a>
+        {% endif %}
+        <a href="{{ path('app_login') }}" class="profile-icon login-btn">👤</a>
+    </div>
+</div>
 
     <div class="content">
     <br><br><br>
         <h2 class="playlist-title">{{ nombre }}</h2>
         {% if app.user and app.user.id == propietario %}
-            <button class="btn btn-primary" onclick="toggleAddSongs()">Añadir Canciones</button>
-            <div class="add-songs-container" id="addSongsContainer">
-                <input type="text" id="songSearch" class="form-control" placeholder="Buscar canciones..." onkeyup="filterSongs()">
-                <ul id="allSongsList">
-                
-                    {% for song in songs %}
-                        <li>
-                        <img src="{{ song.image }}" alt="{{ song.name }}" class="song-img">
-                            <input type="checkbox" value="{{ song.id }}"> {{ song.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
-                <button class="btn btn-success" onclick="addSongsToPlaylist({{ playlistId }})">Añadir Canciones</button>
-            </div>
+            <button class="neon-btn" onclick="toggleAddSongs()">Añadir Canciones</button>
+<div class="add-songs-container" id="addSongsContainer">
+    <input type="text" id="songSearch" class="form-control search-bar" placeholder="Buscar canciones..." onkeyup="filterSongs()">
+    <ul id="allSongsList">
+        {% for song in songs %}
+            <li>
+                <img src="{{ song.image }}" alt="{{ song.name }}" class="song-img">
+                <input type="checkbox" value="{{ song.id }}"> {{ song.name }}
+            </li>
+        {% endfor %}
+    </ul>
+    <button class="neon-btn" onclick="addSongsToPlaylist({{ playlistId }})">Añadir Canciones</button>
+</div>
         {% endif %}
         
         <ul class="song-list">
@@ -98,6 +280,16 @@
     function toggleAddSongs() {
             let container = document.getElementById('addSongsContainer');
             container.style.display = container.style.display === 'block' ? 'none' : 'block';
+            document.querySelectorAll('#allSongsList li').forEach(songItem => {
+    songItem.addEventListener('click', function(event) {
+        // Evita que el evento se dispare cuando se hace clic directamente en el checkbox
+        if (event.target.tagName.toLowerCase() !== 'input') {
+            let checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        }
+    });
+});
+
         }
         
         function filterSongs() {
@@ -176,6 +368,15 @@
             document.getElementById('player').style.display = 'none';
             document.getElementById('audioPlayer').pause();
         }
+
+function filterContent() {
+    let input = document.querySelector('.search-bar').value.toLowerCase();
+    document.querySelectorAll('.song-item').forEach(song => {
+        let title = song.querySelector('.song-name').textContent.toLowerCase();
+        song.style.display = title.includes(input) ? 'flex' : 'none'; // Usar 'flex' en lugar de 'block' para mantener el diseño
+    });
+}
+
     </script>
 </body>
 </html>

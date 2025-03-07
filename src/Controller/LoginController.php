@@ -22,12 +22,14 @@ final class LoginController extends AbstractController
             'controller_name' => 'LoginController',
             'last_username' => $lastUsername,
             'error' => $error,
+            'logResponse' => // Llamar al LogController sin HTTPClient
+                                $this->forward(LogController::class . '::logAction', ['action' => 'Login'])
         ]);
     }
 
     #[Route('/logout', name: 'app_logout')]
     public function logout(AuthenticationUtils $authenticationUtils)
     {
-        
+        $this->forward(LogController::class . '::logAction', ['action' => 'Cierra sesion']);
     }
 }
